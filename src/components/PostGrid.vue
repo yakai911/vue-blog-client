@@ -1,11 +1,17 @@
 <template>
-  <ul></ul>
+  <div>
+    <ul>
+      <li v-for="post in posts" :key="post.id">{{ post.title }}</li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
   name: "PostGrid",
-  props: ["posts"],
+  props: {
+    posts: Array,
+  },
 };
 </script>
 

@@ -1,20 +1,17 @@
 <template>
   <div class="home">
-    <post-grid :posts="posts" />
-    <ul>
-      <li v-for="(post, i) in posts" :key="i">{{ post.title }}</li>
-    </ul>
+    <!-- <post-grid :posts="posts" /> -->
+    <register />
   </div>
 </template>
 
 <script>
-import PostGrid from "../components/PostGrid.vue";
+import PostGrid from "../components/PostGrid";
+import Register from "../components/Register";
 
 export default {
   name: "Home",
-  components: {
-    PostGrid,
-  },
+  components: { PostGrid, Register },
   data() {
     return {
       posts: [
