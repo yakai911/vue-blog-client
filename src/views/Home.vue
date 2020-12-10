@@ -1,17 +1,20 @@
 <template>
   <div class="home">
     <!-- <post-grid :posts="posts" /> -->
-    <register />
+
+    <register v-if="isAuth" />
+    <login v-else />
   </div>
 </template>
 
 <script>
 import PostGrid from "../components/PostGrid";
 import Register from "../components/Register";
+import Login from "../components/Login";
 
 export default {
   name: "Home",
-  components: { PostGrid, Register },
+  components: { PostGrid, Register, Login },
   data() {
     return {
       posts: [
@@ -20,6 +23,7 @@ export default {
         { index: 2, title: "瓦特", body: "等待戈多，迪迪和戈戈" },
         { index: 3, title: "马龙之死", body: "等待戈多，迪迪和戈戈" },
       ],
+      isAuth: false,
     };
   },
 };

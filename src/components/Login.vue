@@ -1,11 +1,7 @@
 <template>
   <div class="form-container">
-    <form class="sign-form" @submit.prevent="signUp(name, email, password)">
-      <h2>新用户注册</h2>
-      <div>
-        <label for="name">用户名</label>
-        <input type="text" v-model="user.name" />
-      </div>
+    <form class="sign-form" @submit.prevent="signIn(email, password)">
+      <h2>登录</h2>
       <div>
         <label for="email">Email</label>
         <input type="eamil" v-model="user.email" />
@@ -14,53 +10,43 @@
         <label for="password">密码</label>
         <input type="password" v-model="user.password" />
       </div>
-      <button type="submit">注册</button>
+      <button type="submit">登录</button>
     </form>
   </div>
 </template>
 
 <script>
-import { reactive } from "vue";
-import { useMutation, useQuery, useResult } from "@vue/apollo-composable";
-import listUserQuery from "../../graphql/listUser.query.gql";
-import registerMutation from "../../graphql/register.mutation.gql";
+import { reactive, ref } from "vue";
+import { useMutation } from "@vue/apollo-composable";
+import loginMutation from "../../graphql/login.mutation.gql";
 
 export default {
-  name: "Register",
+  name: "Login",
   setup() {
     const user = reactive({
-      name: "",
       email: "",
       password: "",
     });
 
-    const { result } = useQuery(listUserQuery);
-    const users = useResult(result, null, (data) => data.users);
+    const token = ref("");
 
-    const { mutate: register } = useMutation(registerMutation, () => ({
+    const { mutate: login } = useMutation(loginMutation, () => ({
       variables: {
-        name: user.name,
         email: user.email,
         password: user.password,
       },
-      update: (store, { data: { register } }) => {
-        const data = store.readQuery({ query: listUserQuery });
-        const updatedData = data.users.concat(register);
-        store.writeQuery({
-          query: listUserQuery,
-          data: { users: updatedData },
-        });
-      },
     }));
 
-    function signUp(name, email, password) {
-      register(name, email, password);
-      user.name = "";
+    async function signIn(email, password) {
+      const res = await login(email, password);
+      const token = res.data.login.accessToken;
+      localStorage.setItem("token", token);
+      console.log(token);
       user.email = "";
       user.password = "";
     }
 
-    return { users, user, register, signUp };
+    return { token, user, signIn };
   },
 };
 </script>

@@ -7,7 +7,7 @@
         <li><router-link to="/about">关于</router-link></li>
       </ul>
 
-      <span>{{ users[0].name }}</span>
+      <span v-if="users">{{ users[0].name }}</span>
     </div>
     <router-view />
   </div>
