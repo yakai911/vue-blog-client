@@ -7,7 +7,7 @@
         <li><router-link to="/about">关于</router-link></li>
       </ul>
 
-      <span v-if="users">{{ users[0].name }}</span>
+      <span v-if="user">{{ user.name }}</span>
     </div>
     <router-view />
   </div>
@@ -16,15 +16,15 @@
 <script>
 import { ref } from "vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
-import listUser from "../graphql/listUser.query.gql";
+import currentUser from "../graphql/currentUser.query.gql";
 
 export default {
   name: "App",
   setup() {
-    const { result } = useQuery(listUser);
-    const users = useResult(result, null, (data) => data.users);
+    const { result } = useQuery(currentUser);
+    const user = useResult(result, null, (data) => data.currentUser);
 
-    return { users };
+    return { user };
   },
 };
 </script>
