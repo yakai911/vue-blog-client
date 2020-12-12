@@ -46,7 +46,7 @@ export default {
       user.password = "";
     }
 
-    return { token, user, signIn };
+    return { user, signIn, token };
   },
 };
 </script>

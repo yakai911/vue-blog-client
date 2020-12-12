@@ -7,6 +7,22 @@
         <li><router-link to="/about">关于</router-link></li>
       </ul>
 
+      <ul className="log-ul" v-if="isAuth">
+        <li>
+          <router-link to="/Login">
+            退出登录
+          </router-link>
+        </li>
+      </ul>
+
+      <ul className="log-ul" v-else>
+        <li>
+          <router-link to="/Login">登录</router-link>
+        </li>
+        <li>
+          <router-link to="/SignUp">注册</router-link>
+        </li>
+      </ul>
       <span v-if="user">{{ user.name }}</span>
     </div>
     <router-view />
@@ -16,15 +32,18 @@
 <script>
 import { ref } from "vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
+import { useRoute } from "vue-router";
 import currentUser from "../graphql/currentUser.query.gql";
 
 export default {
   name: "App",
   setup() {
+    const isAuth = ref(false);
+    const route = useRoute();
     const { result } = useQuery(currentUser);
     const user = useResult(result, null, (data) => data.currentUser);
 
-    return { user };
+    return { user, route, isAuth };
   },
 };
 </script>
